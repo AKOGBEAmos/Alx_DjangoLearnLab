@@ -4,7 +4,7 @@ This command deletes the book previously created and confirms the deletion by at
 
 ```python
 # Python command to delete the book and confirm deletion
-from books.models import Book
+from bookshelf.models import Book
 book = Book.objects.get(title="Nineteen Eighty-Four")
 book.delete()
 books = Book.objects.all()
