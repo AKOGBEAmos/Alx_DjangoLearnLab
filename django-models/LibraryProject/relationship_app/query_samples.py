@@ -27,10 +27,11 @@ def query_samples():
     # Get librarian from a library
     def get_library_librarian(library_name):
         try:
-            library = Library.objects.get(name=library_name)
-            return library.librarian
-        except Library.DoesNotExist:
+            return Librarian.objects.get(library=Library.objects.get(name=library_name))
+        except (Library.DoesNotExist, Librarian.DoesNotExist):
             return None
+        
+
 
 
     # Sample data
