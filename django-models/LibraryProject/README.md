@@ -1,0 +1,1 @@
+This is the introductory project to Django Backend framework development.
