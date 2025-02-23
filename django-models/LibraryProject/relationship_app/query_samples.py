@@ -12,11 +12,11 @@ def query_samples():
     def get_books_by_author(author_name):
         try:
             author = Author.objects.get(name=author_name)
-            return author.books.all()
+            return author.objects.filter(author=author)
         except Author.DoesNotExist:
             return None
 
-    # List all books in a library
+    # List all books in a library 
     def get_library_books(library_name):
         try:
             library = Library.objects.get(name=library_name)
