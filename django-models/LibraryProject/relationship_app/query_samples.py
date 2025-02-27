@@ -1,8 +1,10 @@
 import os
+import sys
 import django
 
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 # Set up Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'relationship_app.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
@@ -12,7 +14,7 @@ def query_samples():
     def get_books_by_author(author_name):
         try:
             author = Author.objects.get(name=author_name)
-            return author.objects.filter(author=author)
+            return Book.objects.filter(author=author)
         except Author.DoesNotExist:
             return None
 
