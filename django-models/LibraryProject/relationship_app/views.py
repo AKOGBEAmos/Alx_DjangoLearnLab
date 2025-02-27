@@ -3,15 +3,19 @@ from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from .models import Book
 from .models import Library
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 def list_books(request):
     books = Book.objects.all()
     book_list = {books: books}
-    return render(request, 'list_books.html', book_list)
+    return render(request, 'relationship_app/list_books.html', book_list)
 
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'library_detail.html'
+    template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
     def get_context_data(self, **kwargs):
