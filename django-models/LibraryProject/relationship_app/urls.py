@@ -8,5 +8,5 @@ urlpatterns = [
     path('books/', list_books, name='list_books'),
     
     # Class-based view for library details
-    path('library/', LibraryDetailView.as_view(), name='library_detail'),
+    path('library/<int:pk>', LibraryDetailView.as_view(), name='library_detail'),
 ]
