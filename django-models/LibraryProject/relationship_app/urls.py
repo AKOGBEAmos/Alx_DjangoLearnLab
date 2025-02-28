@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from .views import list_books, LibraryDetailView
+
 
 app_name = 'relationship_app'
 
@@ -9,4 +10,7 @@ urlpatterns = [
     
     # Class-based view for library details
     path('library/<int:pk>', LibraryDetailView.as_view(), name='library_detail'),
+
+    
+
 ]
