@@ -28,7 +28,7 @@ urlpatterns = [
     path('', include('relationship_app.urls')),
 
     path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(template_name='logout.html'), name='logout'),
 
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
