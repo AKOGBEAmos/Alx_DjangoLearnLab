@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from flask import redirect
 
 from .models import Book
 from .models import Library
@@ -34,6 +35,11 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "register.html"
+
+def register(request):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    return render(request, 'register.html', {'form': form_class})
 
 @login_required
 def profile(request):
