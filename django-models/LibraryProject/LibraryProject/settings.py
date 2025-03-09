@@ -103,9 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = "/accounts/profile"
-LOGOUT_REDIRECT_URL = "/accounts/profile"
+LOGIN_REDIRECT_URL = "/relationship_app/profile/"
+LOGOUT_REDIRECT_URL = "/relationship_app/profile/"
 
+LOGIN_URL = "/relationship_app/login/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

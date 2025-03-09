@@ -1,10 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
+from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+
 from .models import Book
 from .models import Library
 import sys
@@ -27,3 +28,12 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['books'] = self.object.books.all()  
         return context
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "register.html"
+
+@login_required
+def profile(request):
+    return render(request, 'accounts/profile.html') 
