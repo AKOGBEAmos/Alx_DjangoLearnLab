@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 from .models import Book
 from .models import Library
