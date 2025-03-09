@@ -14,7 +14,7 @@ sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 def list_books(request):
     books = Book.objects.all()
-    book_list = {books: books}
+    book_list = {'books': books}
     return render(request, 'relationship_app/list_books.html', book_list)
 
 class LibraryDetailView(DetailView):
@@ -27,15 +27,3 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['books'] = self.object.books.all()  
         return context
-
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return render(request, 'register.html', {'form': form})
