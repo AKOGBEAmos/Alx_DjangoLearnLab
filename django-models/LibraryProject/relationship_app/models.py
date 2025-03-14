@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
@@ -34,3 +36,22 @@ class Librarian(models.Model):
     
     def __str__(self):
         return self.name
+    
+class UserProfile(User):
+    role =  models.CharField(max_length=40)
+    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name="profile")
+
+    USERNAME_FIELD = "email"
+
+    # Signal to create UserProfile when a User is created
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+
+    # Function to save UserProfile when the User is updated
+    def save_user_profile(sender, instance, **kwargs):
+        instance.userprofile.save()
+
+    # Connect signals directly without using @receiver
+    post_save.connect(create_user_profile, sender=User)
+    post_save.connect(save_user_profile, sender=User)
