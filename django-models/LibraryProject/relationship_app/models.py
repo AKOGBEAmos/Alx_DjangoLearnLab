@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from django import forms
 class Author(models.Model):
     name = models.CharField(max_length=50)
     
@@ -12,12 +12,30 @@ class Author(models.Model):
         return "{self.name}"
 
 class Book(models.Model):
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add a book"),
+            ("can_change_book", "Can change a book"),
+            ("can_delete_book", "Can delete a book"),
+        ]
+
     title = models.CharField(max_length=200)
     publication_year = models.CharField(max_length=4)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     
     def __str__(self):
         return f"Book: {self.title} by {self.author} in {self.publication_year}"
+
+    #Adding a new book
+    def add_book(title,author):
+        book = Book.objects.create(title= title, author=author)
+
+#Form to manage the book objects
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author','publication_year']
+
 
 class Library(models.Model):
     name = models.CharField(max_length=200)

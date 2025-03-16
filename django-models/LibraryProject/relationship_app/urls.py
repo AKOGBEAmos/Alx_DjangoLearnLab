@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .views import list_books, LibraryDetailView, profile, register, admin_view, librarian_view, member_view
+from .views import add_book, edit_book, delete_book
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import views as auth_views
 from relationship_app import views
@@ -34,4 +35,9 @@ urlpatterns = [
     path('admin_view/', admin_view, name='admin_view'),
     path('librarian_view/', librarian_view, name='librarian_view'),
     path('member_view/', member_view, name='member_view'),
+
+    # Book operations
+    path('add_book/', add_book, name='add_book'),
+    path('edit_book/', edit_book, name='edit_book'),
+    path('delete_book/', delete_book, name='delete_book'),
 ]

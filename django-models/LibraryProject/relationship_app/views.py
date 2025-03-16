@@ -7,10 +7,10 @@ from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, permission_required
 from flask import redirect
 
-from .models import Book
+from .models import Book, BookForm
 from .models import Library
 import sys
 import os
@@ -80,3 +80,43 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+#Add new book 
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            # Crée le livre avec les données du formulaire
+            form.save()
+            return redirect('book_list')  # Redirige vers la liste des livres après l'ajout
+    else:
+        form = BookForm()
+    return render(request, 'relationship_app/add_book.html', {'form': form})
+
+#Modifying a book
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_title, new_title):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')  
+        
+        form = BookForm()
+    return render(request, 'relationship_app/edit_book.html', {'form': form})
+
+    """ book_id = Book.objects.get(title=book_title)
+    book = Book.objects.get(id=book_id)
+    book = Book.objects.get(title=book_title)
+    book.title = new_title
+    book.save()
+    return HttpResponse(f"Book '{new_title}' updated!") """
+
+#Deleting a book
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_title):
+    book_id = Book.objects.get(title=book_title)
+    book = Book.objects.get(id=book_id)
+    book.delete()
+    return HttpResponse(f"Book '{book.title}' deleted!")
