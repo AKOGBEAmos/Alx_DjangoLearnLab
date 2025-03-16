@@ -37,16 +37,24 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
     
-class UserProfile(User):
-    role =  models.CharField(max_length=40)
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name="profile")
+class UserProfile(models.Model):
+    ROLE_CHOICES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    ]
 
-    USERNAME_FIELD = "email"
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=40, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
 
     # Signal to create UserProfile when a User is created
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            UserProfile.objects.create(user=instance)
+            # Crée le profil seulement s'il n'existe pas déjà
+            UserProfile.objects.get_or_create(user=instance, defaults={'role': 'Member'})
 
     # Function to save UserProfile when the User is updated
     def save_user_profile(sender, instance, **kwargs):

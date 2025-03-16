@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import list_books, LibraryDetailView, profile, register
+from .views import list_books, LibraryDetailView, profile, register, admin_view, librarian_view, member_view
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import views as auth_views
 from relationship_app import views
@@ -31,4 +31,7 @@ urlpatterns = [
     # Authentication views
     path('accounts/', include('django.contrib.auth.urls')),
 
+    path('admin_view/', admin_view, name='admin_view'),
+    path('librarian_view/', librarian_view, name='librarian_view'),
+    path('member_view/', member_view, name='member_view'),
 ]

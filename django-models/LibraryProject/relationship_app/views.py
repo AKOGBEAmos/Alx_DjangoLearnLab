@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
@@ -7,6 +7,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from flask import redirect
 
 from .models import Book
@@ -52,3 +53,30 @@ def register(request):
 @login_required
 def profile(request):
     return render(request, 'relationship_app/profile.html') 
+
+# Check if user is an admin
+def is_admin(user):
+    return user.is_authenticated and user.userprofile.role == 'Admin'
+
+# Check if user is a librarian
+def is_librarian(user):
+    return user.is_authenticated and user.userprofile.role == 'Librarian'
+
+# Check if user is a member
+def is_member(user):
+    return user.is_authenticated and user.userprofile.role == 'Member'
+
+# Admin view
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+# Librarian view
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+# Member view
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
