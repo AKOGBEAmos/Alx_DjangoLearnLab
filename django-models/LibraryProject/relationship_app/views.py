@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -9,7 +9,6 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
-from flask import redirect
 
 from .models import Book, BookForm
 from .models import Library
@@ -90,34 +89,35 @@ def add_book(request):
         if form.is_valid():
             # Crée le livre avec les données du formulaire
             form.save()
-            return redirect('book_list')  # Redirige vers la liste des livres après l'ajout
+            return redirect('book/list_books')  # Redirige vers la liste des livres après l'ajout
+        
+        """ Not working need to be checked. """
     else:
         form = BookForm()
     return render(request, 'relationship_app/add_book.html', {'form': form})
 
 #Modifying a book
 @permission_required('relationship_app.can_change_book')
-def edit_book(request, book_title, new_title):
+def edit_book(request, book_title):
+    book = get_object_or_404(Book, title=book_title)
+
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
             return redirect('book_list')  
-        
-        form = BookForm()
+    else:
+        form = BookForm(instance=book)  # Pre-fill form with existing book data
+    
     return render(request, 'relationship_app/edit_book.html', {'form': form})
-
-    """ book_id = Book.objects.get(title=book_title)
-    book = Book.objects.get(id=book_id)
-    book = Book.objects.get(title=book_title)
-    book.title = new_title
-    book.save()
-    return HttpResponse(f"Book '{new_title}' updated!") """
 
 #Deleting a book
 @permission_required('relationship_app.can_delete_book')
 def delete_book(request, book_title):
-    book_id = Book.objects.get(title=book_title)
-    book = Book.objects.get(id=book_id)
-    book.delete()
-    return HttpResponse(f"Book '{book.title}' deleted!")
+    book = get_object_or_404(Book, title=book_title)
+
+    if request.method == 'POST':
+        book.delete()
+        return redirect('book_list')  # Redirect to the list of books after deletion
+    
+    return render(request, 'relationship_app/delete_book.html', {'book': book})

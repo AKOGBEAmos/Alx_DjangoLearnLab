@@ -1,22 +1,21 @@
 <!-- relationship_app/delete_book.html -->
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete a Book</title>
+    <title>Delete Book</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-{% block content %}
 <body>
     <div class="container mt-5">
-        <h2>Supprimer le livre : {{ book.title }}</h2>
-        <p>Êtes-vous sûr de vouloir supprimer ce livre ? Cette action est irréversible.</p>
+        <h2>Are you sure you want to delete "{{ book.title }}"?</h2>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-            <a href="{% url 'book_list' %}" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a href="{% url 'book_list' %}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>
-{% endblock %}
+</html>
